@@ -16,7 +16,7 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=DockerAppDB
+      - POSTGRES_DB=ArdAppDB
     volumes:
       - ./pg_db:/var/lib/postgresql/data/
     ports:
