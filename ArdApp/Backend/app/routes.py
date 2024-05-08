@@ -76,21 +76,29 @@ def add_data():
             entry = History(user_id=index, soil_temperature = st, soil_humidity = sh, air_temperature = at, air_humidity = ah, light_intensity = li)
             db.session.add(entry)
             db.session.commit()
+            return {user.min_light_intensity}
 
-            last_entry= History.query.filter_by(user_id=index).order_by(History.id.desc()).first()
-            st = last_entry.soil_temperature
-            sh = last_entry.soil_humidity
-            at = last_entry.air_temperature
-            ah = last_entry.air_humidity
-            li = last_entry.light_intensity
-
-        return {}
+    return {}
         
 
-@main.route('/', methods = ['GET'])
+@main.route('/', methods = ['GET', 'POST'])
 @login_required
 def main_page():
     index = current_user.get_id()
+    light_intensity = request.form.get('value_intensity')
+    user = User.query.filter_by(id=index).first()
+    current_min_light_intensity = user.min_light_intensity
+    if request.method == 'POST':
+        if not light_intensity:
+            flash('Please fill field!')
+        else:
+            if not light_intensity.isnumeric():
+                flash('Enter a number!')
+            else:
+                user.min_light_intensity = light_intensity
+                db.session.commit()
+                return redirect(url_for('main.main_page'))
+   
     last_entries= History.query.filter_by(user_id=index).order_by(History.id.desc()).limit(10)
     data_date = []
     data_st = []
@@ -112,7 +120,7 @@ def main_page():
     values = list(reversed(data_st))
  
     # Return the components to the HTML template 
-    return render_template("chart.html", labels=labels, data_st=data_st, data_sh=data_sh, data_at=data_at, data_ah=data_ah, data_li=data_li)
+    return render_template("chart.html", labels=labels, data_st=data_st, data_sh=data_sh, data_at=data_at, data_ah=data_ah, data_li=data_li, current_min_light_intensity=current_min_light_intensity)
 
 @main.after_request
 def redirect_to_signin(response):

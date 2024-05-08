@@ -11,6 +11,31 @@
     </style>
 </head>
 <body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class=flashes>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <p>
+        Current min light intensity: {{current_min_light_intensity}}
+    </p>
+
+    <form method="POST">
+        <table>
+            <tr>
+                <td>Turn on the phytolamp when the light intensity value is less than</td>
+                <td><input type="text" name="value_intensity"></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Save"></td>
+            </tr>
+        </table>
+    </form>
     <div class="chartBox">
        <canvas id="lineChart_1"></canvas>
     </div>

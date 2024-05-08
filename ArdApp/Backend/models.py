@@ -10,6 +10,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     login = db.Column(db.String(128), unique=True, nullable = False)
     password = db.Column(db.String(255), nullable=False)
+    min_light_intensity = db.Column(db.Integer)
 
     def __repr__(self):
         return f'<User: {self.id}, {self.login}>'   
