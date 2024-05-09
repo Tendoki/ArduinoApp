@@ -76,7 +76,7 @@ def add_data():
             entry = History(user_id=index, soil_temperature = st, soil_humidity = sh, air_temperature = at, air_humidity = ah, light_intensity = li)
             db.session.add(entry)
             db.session.commit()
-            return {user.min_light_intensity}
+            return str(user.min_light_intensity)
 
     return {}
         
